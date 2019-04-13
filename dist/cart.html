@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/cart.css"/>
+		<script src="js/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/cart.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="go-tool">
+		<div class="wrap">
+			<div class="tool-link" id="tool-link">
+				<span class="welcome">你好，欢迎来到安踏官方商城！</span> 
+				<span id="logReg" class="logReg"> 
+					<a href="login.html?return=/cart.html" target="_blank" class="child-node aa">请登录</a>
+					<a href="regi.html?return=/cart.html" target="_blank" class="child-node aa">免费注册
+</a>
+				</span>					
+			</div>
+			<!--tool-link-->
+			<div class="quick-link">
+				<a href="#" class="quic">收藏安踏</a>
+				<a href="index.html" class="child-pl aa">品牌官网</a> 
+				<a href="#" class="child-pl aa">企业采购</a>
+				<a href="index.html"  class="quick">手机商城</a>
+			</div>
+			<!--quick-link-->
+
+		</div>
+		</div>
+		<div id="header-simple">
+			<div class="logo wid">
+				<a href="index.html" class="logoa">
+					<img src="img/cn_logo.png">
+				</a>
+			</div>
+		</div>
+		<div class="cart">
+			<div class="cart-box">
+				<div class="cart-hd">
+					<h2>我的购物车</h2>
+					<a href="#"><img src="img/coupons-btn-pc.png"/></a>
+				</div>
+				<!--购物车为空时提示信息-->
+				<div class="message">
+					<h2>我的购物车</h2>
+					<p>购物车内暂时没有商品，您可以 马上去
+						<a href="index.html">挑选商品</a>
+					</p>
+				</div>
+			</div>
+			
+			<div class="cart_inner">
+			<table class="cart_table">
+				<thead>
+					<tr>
+						<td width="50">
+							<input type="checkbox" class="checkAll">
+						</td>
+						<td width="80">商品编号</td>
+						<td width="120">商品图片</td>
+						<td style="text-align: left">商品信息</td>
+						<td width="120">单价</td>
+						<td width="150">商品数量</td>
+						<td width="100">总价</td>
+						<td width="90">删除商品</td>
+					</tr>
+				</thead>
+				<tbody id="cartList">
+					<!--所选商品列表-->
+					<tr class="item">
+						<td align="center">
+							<input class="checkbox Jcki" type="checkbox">
+						</td>
+						<td class="p-numbered">91925501</td>
+						<td class="p-img">
+							<a href="#"class="in_b">
+								<img src="img/server_11.jpg" width="50" height="50" class="vm" />	
+							</a>				
+						</td>
+						<td class="p-name">
+							<h2>
+								<a href="/anta-91925501-5.html" target="_blank" >男子跑鞋-91925501</a>
+							</h2>
+						</td>
+						<td class="p-price">
+							<span class="price">￥529.00</span>
+						</td>
+						<td class="p-quantity">
+							<div class="p-form">
+							<a href="#" class="miuts">-</a>
+							<input type="text" class="quantity-text" value="1">
+							<a href="#" class="plus">+</a>
+							</div>
+						</td>
+						<td class="p-total">
+							<a class="p-tpr">￥529.00</a>
+						</td>
+						<td class="p-remove">
+							<a class="cart-remove">删除</a>
+						</td>
+					</tbody>
+					<tbody class="nnn">
+					<tr class="cart_toolbar">
+						<td colspan="4" class="total_box">
+							<span class="delete">
+								<a href="#" class="del-d">删除选中的商品</a>
+								<a href="#" class="del-c">清空购物车</a>
+							</span>
+						</td>
+						<td colspan="6" class="total_b">
+							<p>
+								<label for="应付金额">应付金额¥</label>
+								<span class="total_price">0</span>
+							</p>						
+						</td>
+					</tr>
+					
+					<tr class="cart_total">
+						<td colspan="8">
+							<a href="index.html" class="continue">继续购物</a>
+							<a class="account" href='/login.html?return=/cart.html';">提交订单</a>					
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			</div>
+		</div>
+		<script type="text/javascript">
+			var cart = new Cart();
+			cart.showData('cartList');
+			cart.getTotalPrice();
+			//全选
+			$(".checkAll").click(function(){
+				$(".item .jcki").prop("checked",$(this).prop("checked"));
+				cart.getTotalPrice();
+			});
+			//单个选择
+			$(".jcki").click(function(){
+				if($(".jcki:checked").length == $(".jcki").length){
+					$(".checkAll").prop("checked",true);
+				}else{
+					$(".checkAll").prop("checked",false);
+				}
+				cart.getTotalPrice();
+			})
+			//删除选中的商品
+			$(".del-d").click(function(){
+				if($(".jcki:checked")){
+					if($(".jcki").length == 1){
+						$(".checkAll").prop("checked",false);
+						$(".message").css({"display":"block"});
+						$(".cart_inner").css({"display":"none"});
+					}
+					$(".jcki:checked").parents(".item").remove();
+					for(let i = 0;i<$(".jcki:checked").length;i++){
+						var id = $(".jcki:checked").parents(".item").attr("data-id");
+						cart.removeCart(id,$(".jcki:checked").parents(".item"));
+						//delete cart.cartData[id,];
+						//setCookie("cart",JSON.stringify(this.cartData),7);
+					}
+				}
+				cart.getTotalPrice();
+			})
+			//清空购物车
+			$(".del-c").click(function(){
+				$(".item").remove();
+				setCookie("cart",JSON.stringify(this.cartData),-7);
+				$(".message").css({"display":"block"});
+				$(".cart_inner").css({"display":"none"});
+			})
+		</script>
+	</body>
+</html>
